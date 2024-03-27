@@ -1,20 +1,25 @@
+// TODO : Module
 const express = require("express");
+const path = require("path");
+const homePage_controller = require("./controllers/homepage_controller");
+const login_controller = require("./controllers/login_controller");
+const dashboard_controller = require("./controllers/dashboard_controller");
 const PORT = 4567;
-
 const server = express();
+
 // TODO : Middleware
 server.use(express.urlencoded());
+server.use(express.static(path.join(__dirname, "views")));
 
 // TODO : Router
 //homePage
-server.get("/login-page", (req, res) => {
-  res.status(200).send("sukses");
-});
+server.get("/", homePage_controller);
+
+//login-page
+server.get("/login-page", login_controller);
 
 //Dashboard
-server.get("/dashboard", (req, res) => {
-  res.status(200).send("sukses");
-});
+server.get("/dashboard", dashboard_controller);
 
 //Daftar Buku
 server.get("/daftar-buku", (req, res) => {
