@@ -6,10 +6,33 @@ const login_controller = require("./controllers/login_controller");
 const dashboard_controller = require("./controllers/dashboard_controller");
 const PORT = 4567;
 const server = express();
+const { Client } = require("pg");
 
 // TODO : Middleware
 server.use(express.urlencoded());
 server.use(express.static(path.join(__dirname, "views")));
+
+// config DB
+const client = new Client({
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+});
+client.connect((error) => {
+  if (error != null) {
+    console.log(error);
+  } else {
+    console.log("connect to database");
+  }
+});
+
+// tesDB
+server.get("/test", async (req, res) => {
+  const data = await client.query(` SELECT * FROM admin`);
+  res.status(200).json(data.rows);
+});
 
 // TODO : Router
 //homePage
