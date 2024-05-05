@@ -1,7 +1,5 @@
-const path = require("path");
+const home = (req, res) => {
+  res.render("homePage");
+};
 
-function homePage_controller(req, res) {
-  res.sendFile(path.join(__dirname, "../views/homePage.html"));
-}
-
-module.exports = homePage_controller;
+module.exports = home;
