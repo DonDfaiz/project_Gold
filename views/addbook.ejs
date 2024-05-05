@@ -93,9 +93,10 @@
       </div>
     </nav>
     <br /><br /><br /><br />
-    <form action="/buku/addbook" method="post">
-      <div class="form-floating mb-3">
-        <input
+    <form action="<%- !updateId ? "/buku/addbook" : `/buku/daftar-buku/update/${updateId}?_method=PUT` %>" method="post"> 
+        <input type="hidden" name="_method" value="PUT">
+        <div class="form-floating mb-3">
+          <input
           type="judul"
           class="form-control"
           id="judul_txt"
@@ -124,7 +125,9 @@
         />
         <label for="floatingPassword">Penerbit</label>
       </div>
-      <button type="submit">Simpan</button>
+      <div class="d-grid gap-2 d-inline">
+        <button class="btn btn-primary" type="submit">Simpan</button>
+      </div>
     </form>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

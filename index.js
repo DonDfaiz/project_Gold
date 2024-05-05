@@ -1,6 +1,7 @@
 // TODO : Module
 const express = require("express");
 const path = require("path");
+const methodOverride = require("method-override");
 // const homePage_controller = require("./controllers/homepage_controller");
 // const login_controller = require("./controllers/login_controller");
 // const dashboard_controller = require("./controllers/dashboard_controller");
@@ -14,6 +15,7 @@ const homeRoutes = require("./routes/homeRoutes");
 // TODO : Middleware
 server.use(express.json());
 server.use(express.urlencoded());
+server.use(methodOverride("_method"));
 server.set("view engine", "ejs");
 server.use("/buku", bookRoutes);
 server.use("/", homeRoutes);

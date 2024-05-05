@@ -14,7 +14,8 @@ const getBook = async (req, res) => {
 };
 
 const formBook = async (req, res) => {
-  res.render("addbook");
+  const updateId = req.query.update_id;
+  res.render("addbook", { updateId });
 };
 const addBook = async (req, res) => {
   try {
@@ -44,53 +45,60 @@ const getDetail = async (req, res) => {
     // Render halaman bookdetail dengan data buku yang ditemukan
     res.render("bookdetail", {
       bookItem,
+      id,
     });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Internal server error");
   }
 };
-
 const updateBook = async (req, res) => {
   await client.query("BEGIN");
   try {
     const payload = req.body;
     const id = req.params.id;
 
+    // Ambil data lama dari database
     const rawOldData = await client.query(queries.oldDetail, [id]);
     const oldData = rawOldData.rows[0];
+
+    // Perbarui data buku dengan data yang dikirim dalam permintaan
     const title = payload.title || oldData.title;
     const author = payload.author || oldData.author;
     const publisher = payload.publisher || oldData.publisher;
 
-    const newRawData = await client.query(queries.newDetail, [id]);
-    const newData = newRawData.rows;
+    // Eksekusi query untuk memperbarui data buku
+    await client.query(queries.newDetail, [title, author, publisher, id]);
 
+    // Komit transaksi
     await client.query("COMMIT");
-    res.redirect("buku/daftar-buku" + id);
+
+    // Arahkan pengguna ke halaman detail buku
+    res.redirect("/buku/daftar-buku/detail/" + id);
   } catch (error) {
+    // Gulung transaksi jika terjadi kesalahan
     await client.query("ROLLBACK");
-    res.status(500).send("internal server error");
+    console.error("Error:", error);
+    res.status(500).send("Internal server error");
   }
 };
 
-module.exports = { getBook, addBook, formBook, getDetail, updateBook };
-// async function addNewBook(req, res) {
-//   const { title, author, publisher, quantity } = req.body;
+const deleteBook = async (req, res) => {
+  try {
+    const id = req.params.id;
+    await client.query(queries.deleteData, [id]); // melakukan penghapusan data berdasarkan id
+    res.redirect("/buku/daftar-buku"); // setelah berhasil menghapus, redirect kembali ke halaman daftar buku
+  } catch (error) {
+    console.error("delete failed", error);
+    res.status(500).send("Internal server error");
+  }
+};
 
-//   await client.query("BEGIN");
-//   try {
-//     const insertBook = await client.query(
-//       ,
-//       [title, author, publisher, quantity]
-//     );
-//     await client.query("COMMIT");
-//     res.status(200).json("sukses");
-//   } catch (error) {
-//     console.log(error);
-//     await client.query("ROLLBACK");
-//     res.status(500).send("internal server error");
-//   }
-// }
-
-// module.exports = addNewBook;
+module.exports = {
+  getBook,
+  addBook,
+  formBook,
+  getDetail,
+  updateBook,
+  deleteBook,
+};
