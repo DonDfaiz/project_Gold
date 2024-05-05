@@ -15,7 +15,9 @@
   <body>
     <nav class="navbar navbar-dark bg-dark fixed-top">
       <div class="container-fluid">
-        <a class="navbar-brand" id="nama_brand" href="#">Perpus Online</a>
+        <a class="navbar-brand" id="nama_brand" href="/buku/daftar-buku"
+          >Perpus Online</a
+        >
         <button
           class="navbar-toggler"
           type="button"
@@ -95,20 +97,36 @@
     <br /><br /><br /><br />
     <section>
       <% book.forEach(bookItem => { %>
-      <div class="card" style="width: 18rem">
-        <!-- <img
+      <!-- <div class="card" style="width: 18rem"> -->
+      <!-- <img
           src="../public/images/hp1.jpg"
           class="card-img-top"
           alt="Harry Potter and the Sorcerers Stone"
         /> -->
-        <div class="card-body">
-          <h5 class="card-title"><%= bookItem.title %></h5>
-          <p class="card-text"><%= bookItem.author %></p>
-          <p><%= bookItem.publisher%></p>
-          <a href="#" class="btn btn-primary">Pinjam</a
-          ><a class="btn btn-primary" href="/buku/daftar-buku/detail/<%= bookItem.id %>">Detail</a>
+      <div class="row" style="display: contents">
+        <div class="col-sm-6 mb-3 mb-sm-0" style="display: inline;">
+          <div class="card" style="display: inline-block;">
+            <div class="card-body">
+              <h5 class="card-title"><%= bookItem.title %></h5>
+              <p class="card-text"><%= bookItem.author %></p>
+              <p><%= bookItem.publisher%></p>
+              <div class="grid gap-3">
+                <div class="p-2 g-col-6 d-inline">
+                  <a href="#" class="btn btn-primary">Pinjam</a>
+                </div>
+                <div class="p-2 g-col-6 d-inline">
+                  <a
+                    class="btn btn-primary"
+                    href="/buku/daftar-buku/detail/<%= bookItem.id %>"
+                    >Detail</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+      <!-- </div> -->
       <% }) %>
     </section>
 

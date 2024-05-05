@@ -9,6 +9,7 @@ const PORT = 4567;
 const server = express();
 const { Client } = require("pg");
 const client = require("./db/db");
+const fileUpload = require("express-fileupload");
 const bookRoutes = require("./routes/bookRoutes");
 const homeRoutes = require("./routes/homeRoutes");
 
@@ -21,6 +22,7 @@ server.use("/buku", bookRoutes);
 server.use("/", homeRoutes);
 server.use(express.static(path.join(__dirname, "views")));
 server.use(express.static("public"));
+server.use(fileUpload());
 // config DB
 // const client = new Client({
 //   host: process.env.DB_HOST,
